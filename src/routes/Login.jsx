@@ -8,7 +8,7 @@ export default function Login() {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [errorResponse, setErrorResponse] = useState("")
-    
+
     const auth = useAuth()
     const goTo = useNavigate()
 
@@ -16,14 +16,19 @@ export default function Login() {
         e.preventDefault()
 
         try {
+            if ((username.trim() === '') || (!password.trim() === '')) {
+                setErrorResponse('!Todos los campos son obligatorios¡')
+                return null
+            }
+
             const response = await axios({
                 method: 'post',
                 url: `${import.meta.env.VITE_API_URL}/usuario-inicio-sesion`,
+                headers: {},
                 data: {
                     nombre: username,
                     contrasena: password
                 },
-                withCredentials: false,
                 responseType: 'json'
             })
 
@@ -31,16 +36,24 @@ export default function Login() {
                 // Redirigir a /dashboard y cargar token en localStorage
                 console.log("¡Inicio de sesión correcto!")
                 setErrorResponse("")
-                goTo("/")
+
+                // Almacenar token recibido de backend
+                if (response?.data?.respuesta) {
+                    auth.saveToken(response.data.respuesta.token)
+                    auth.saveUser(response.data.respuesta.nombre)
+                    goTo("/dashboard")
+                }
+
             } else {
                 // Mostrar error en formulario
                 console.log('¡Ocurrio un error!')
-                setErrorResponse('!Error al iniciar sesión¡')
+                setErrorResponse('[1] !Error al iniciar sesión¡')
                 return null
             }
 
         } catch (error) {
             console.log(error)
+            setErrorResponse('[2] !Error al iniciar sesión¡')
         }
     }
 
