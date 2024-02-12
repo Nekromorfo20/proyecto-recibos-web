@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Login from './routes/Login.jsx'
-import Signup from './routes/Signup.jsx'
 import Dashboard from './routes/Dashboard.jsx'
 import EditarRecibo from './routes/EditarRecibo.jsx'
 import CrearRecibo from './routes/CrearRecibo.jsx'
@@ -14,10 +13,6 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Login />
-  },
-  {
-    path: "/signup",
-    element: <Signup />
   },
   {
     path: "/",

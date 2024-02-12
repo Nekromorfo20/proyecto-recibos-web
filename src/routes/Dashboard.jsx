@@ -1,37 +1,32 @@
 import { useState, useEffect } from "react"
 import { useAuth } from "../auth/AuthProvider"
 import { Link } from "react-router-dom"
-import { eliminarRecibo, obtenerRecibos } from '../services'
+import { obtenerRecibosService, eliminarReciboService } from '../services'
 import TablaRecibos from "../components/TablaRecibos"
+import DefaultLayout from "../layout/DefaultLayout"
 
 const Dashboard = () => {
     const auth = useAuth()
     const [recibos, setRecibos] = useState([])
 
-    const recibosFn = async () => {
-        const resultado = await obtenerRecibos(auth.getUser(), auth.getToken())
+    const listarRecibos = async () => {
+        const resultado = await obtenerRecibosService(auth.obtenerNombre(), auth.obtenerToken())
         setRecibos(resultado?.data?.respuesta)
     }
 
     const handleEliminarRecibo = async (id) => {
-        const resultado = await eliminarRecibo(id, auth.getUser(), auth.getToken())
-        if (resultado?.data) recibosFn()
+        const resultado = await eliminarReciboService(id, auth.obtenerNombre(), auth.obtenerToken())
+        if (resultado?.data) listarRecibos()
     }
 
-    const handleCerrarSesion = () => {
-        auth.logOut()
-        return null
-    }
-
-    // Cargar todos los recibos
     useEffect(() => {
-        recibosFn()
+        listarRecibos()
     }, [])
 
     return (
-        <>
-            <h1>Lista de recibos de {auth.getUser()}</h1>
-
+    <>
+        <DefaultLayout>
+            <h1>Listado de recibos:</h1>
             <Link to="/recibo/crear">Crear recibo</Link>
 
             <table>
@@ -57,9 +52,8 @@ const Dashboard = () => {
                     ))}
                 </tbody>
             </table>
-
-            <button onClick={handleCerrarSesion}>Cerrar sesión</button>
-        </>
+        </DefaultLayout>
+    </>
     )
 }
 

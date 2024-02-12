@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react"
 import { useNavigate, useLocation, Link } from "react-router-dom"
 import { useAuth } from "../auth/AuthProvider"
-import { obtenerRecibo, editarRecibo } from '../services'
+import { obtenerReciboService, editarReciboService } from '../services'
+import DefaultLayout from "../layout/DefaultLayout"
 
 const EditarRecibo = () => {
     const auth = useAuth()
     const location = useLocation()
     const goTo = useNavigate()
 
-    const [idRecibo, setIdRecibo] = useState(0)
+    const [idRecibo, setIdRecibo] = useState(null)
     const [proveedorEditado, setProveedorEditado] = useState("")
     const [montoEditado, setMontoEditado] = useState(0)
     const [monedaEditado, setMonedaEditado] = useState("")
@@ -19,7 +20,7 @@ const EditarRecibo = () => {
     const buscarReciboAEditar = async () => {
         let id = Number(location.pathname.replace(/\D/g, ""))
 
-        const respuesta = await obtenerRecibo(id, auth.getToken())
+        const respuesta = await obtenerReciboService(id, auth.obtenerToken())
         if (respuesta?.data?.respuesta) {
             const { proveedor, monto, moneda, fecha, comentario } = respuesta.data.respuesta
             setIdRecibo(id)
@@ -57,7 +58,7 @@ const EditarRecibo = () => {
             return null
         }
 
-        const resultado = await editarRecibo(idRecibo, proveedorEditado, montoEditado, monedaEditado, fechaEditado, comentarioEditado, auth.getToken())
+        const resultado = await editarReciboService(idRecibo, proveedorEditado, montoEditado, monedaEditado, fechaEditado, comentarioEditado, auth.obtenerToken())
         if (resultado?.data?.respuesta) {
             setErrorMensaje("")
             console.log('Recibo editado con exito')
@@ -73,8 +74,9 @@ const EditarRecibo = () => {
     }, [])
 
     return(
-        <>
-           { !!errorMensaje && <div style={{ color: "#DC143C" }}>{errorMensaje}</div> }
+    <>
+        <DefaultLayout>
+            { !!errorMensaje && <div style={{ color: "#DC143C" }}>{errorMensaje}</div> }
             <form
                 onSubmit={handleEditarRecibo}
             >
@@ -137,7 +139,8 @@ const EditarRecibo = () => {
             </form>
 
             <Link to="/dashboard">Regresar</Link>
-        </>
+        </DefaultLayout>
+    </>
     )
 }
 

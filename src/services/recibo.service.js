@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const obtenerRecibo = async (id, token) => {
+const obtenerReciboService = async (id, token) => {
     const response = await axios({
         method: 'get',
         url: `${import.meta.env.VITE_API_URL}/recibo?id=${id}`,
@@ -13,7 +13,7 @@ const obtenerRecibo = async (id, token) => {
     return response
 }
 
-const obtenerRecibos = async (nombre, token) => {
+const obtenerRecibosService = async (nombre, token) => {
     const exts = (nombre !== '' || nombre !== null) ? `?nombre=${nombre}` : ''
 
     const response = await axios({
@@ -28,7 +28,7 @@ const obtenerRecibos = async (nombre, token) => {
     return response
 }
 
-const crearRecibo = async (nombre, proveedor, monto, moneda, fecha, comentario, token) => {
+const crearReciboService = async (nombre, proveedor, monto, moneda, fecha, comentario, token) => {
     const response = await axios({
         method: 'post',
         url: `${import.meta.env.VITE_API_URL}/recibo`,
@@ -49,7 +49,7 @@ const crearRecibo = async (nombre, proveedor, monto, moneda, fecha, comentario, 
     return response
 }
 
-const editarRecibo = async (id, proveedor, monto, moneda, fecha, comentario, token) => {
+const editarReciboService = async (id, proveedor, monto, moneda, fecha, comentario, token) => {
     const response = await axios({
         method: 'put',
         url: `${import.meta.env.VITE_API_URL}/recibo`,
@@ -70,7 +70,7 @@ const editarRecibo = async (id, proveedor, monto, moneda, fecha, comentario, tok
     return response
 }
 
-const eliminarRecibo = async (id, nombre, token) => {
+const eliminarReciboService = async (id, nombre, token) => {
     const response = await axios({
         method: 'delete',
         url: `${import.meta.env.VITE_API_URL}/recibo`,
@@ -88,9 +88,9 @@ const eliminarRecibo = async (id, nombre, token) => {
 }
 
 export {
-    obtenerRecibo,
-    obtenerRecibos,
-    crearRecibo,
-    editarRecibo,
-    eliminarRecibo
+    obtenerReciboService,
+    obtenerRecibosService,
+    crearReciboService,
+    editarReciboService,
+    eliminarReciboService
 }

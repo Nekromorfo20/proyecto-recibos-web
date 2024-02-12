@@ -1,24 +1,36 @@
-import { Link } from 'react-router-dom'
+import { useAuth } from "../auth/AuthProvider"
 
-export default function DefaultLayout ({ children }) {
+const DefaultLayout = ({ children }) => {
+    const auth = useAuth()
+    
+    const nombre = JSON.parse(localStorage.getItem("nombre"))
+    const handleCerrarSesion = () => {
+        auth.cierraSesion()
+        return null
+    }
+
     return (
-        <>
-            <header>
-                <nav>
-                    <ul>
-                        <li>
-                            <Link to="/">Home</Link>
-                        </li>
-                        <li>
-                            <Link to="/signup">Signup</Link>
-                        </li>
-                    </ul>
-                </nav>
-            </header>
+    <>
+        <header>
+            <nav>
+                <ul>
+                    <li>
+                        {`Hola ${nombre}`}
+                    </li>
+                    <li>
+                        <button onClick={handleCerrarSesion}>
+                            Cerrar sesión
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </header>
 
-            <main>
-                {children}
-            </main>
-        </>
+        <main>
+            {children}
+        </main>
+    </>
     )
 }
+
+export default DefaultLayout

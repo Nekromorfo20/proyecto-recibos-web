@@ -1,11 +1,11 @@
-import { usuarioIniciarSesion } from './usuario.service'
-import { obtenerRecibo, obtenerRecibos, crearRecibo, editarRecibo, eliminarRecibo } from './recibo.service'
+import { usuarioIniciarSesionService } from './usuario.service'
+import { obtenerReciboService, obtenerRecibosService, crearReciboService, editarReciboService, eliminarReciboService } from './recibo.service'
 
 export {
-    usuarioIniciarSesion,
-    obtenerRecibo,
-    obtenerRecibos,
-    crearRecibo,
-    editarRecibo,
-    eliminarRecibo
+    usuarioIniciarSesionService,
+    obtenerReciboService,
+    obtenerRecibosService,
+    crearReciboService,
+    editarReciboService,
+    eliminarReciboService
 }

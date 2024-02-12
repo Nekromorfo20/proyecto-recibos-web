@@ -1,7 +1,8 @@
 import { useState } from "react"
 import { useNavigate, Link } from "react-router-dom"
 import { useAuth } from "../auth/AuthProvider"
-import { crearRecibo } from '../services'
+import { crearReciboService } from '../services'
+import DefaultLayout from "../layout/DefaultLayout"
 
 const EditarRecibo = () => {
     const auth = useAuth()
@@ -39,8 +40,7 @@ const EditarRecibo = () => {
             return null
         }
 
-
-        const resultado = await crearRecibo(auth.getUser(), proveedorNuevo, montoNuevo, monedaNuevo, fechaNuevo, comentarioNuevo, auth.getToken())
+        const resultado = await crearReciboService(auth.obtenerNombre(), proveedorNuevo, montoNuevo, monedaNuevo, fechaNuevo, comentarioNuevo, auth.obtenerToken())
         if (resultado?.data?.respuesta) {
             setErrorMensaje("")
             console.log('Recibo creado con exito')
@@ -53,8 +53,9 @@ const EditarRecibo = () => {
     }
 
     return(
-        <>
-           { !!errorMensaje && <div style={{ color: "#DC143C" }}>{errorMensaje}</div> }
+    <>
+        <DefaultLayout>
+            { !!errorMensaje && <div style={{ color: "#DC143C" }}>{errorMensaje}</div> }
             <form
                 onSubmit={handleCrearRecibo}
             >
@@ -116,9 +117,9 @@ const EditarRecibo = () => {
                     value="Crear recibo"
                 />
             </form>
-
             <Link to="/dashboard">Regresar</Link>
-        </>
+        </DefaultLayout>
+    </>
     )
 }
 
