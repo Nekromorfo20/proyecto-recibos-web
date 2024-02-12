@@ -14,6 +14,7 @@ const EditarRecibo = () => {
     const [monedaEditado, setMonedaEditado] = useState("")
     const [fechaEditado, setFechaEditado] = useState("")
     const [comentarioEditado, setComentarioEditado] = useState("")
+    const [errorMensaje, setErrorMensaje] = useState("")
 
     const buscarReciboAEditar = async () => {
         let id = Number(location.pathname.replace(/\D/g, ""))
@@ -34,10 +35,32 @@ const EditarRecibo = () => {
         }
     }
 
-    const handleEditarRecibo = async () => {
+    const handleEditarRecibo = async (e) => {
+        e.preventDefault()
+
+        // Validar datos  
+        if (proveedorEditado.trim() === "") {
+            setErrorMensaje("Debe colocar el nombre del proveedor")
+            return null
+        }
+
+        const valProveedor = proveedorEditado.match("^[a-zA-Z0-9áéíóúÁÉÍÓÚ ]*$")
+        const valComentario = comentarioEditado.match("^[a-zA-Z0-9áéíóúÁÉÍÓÚ ]*$")
+        
+        if (valProveedor === null || valComentario === null) {
+            setErrorMensaje("No se permiten caracteres especiales en Proveedor y Comentario")
+            return null
+        }
+
+        if (Number(montoEditado) < 0) {
+            setErrorMensaje("El monto no puede ser menor a 0")
+            return null
+        }
+
         const resultado = await editarRecibo(idRecibo, proveedorEditado, montoEditado, monedaEditado, fechaEditado, comentarioEditado, auth.getToken())
         if (resultado?.data?.respuesta) {
-            console.log('Recibo editadoo con exito')
+            setErrorMensaje("")
+            console.log('Recibo editado con exito')
             goTo("/dashboard")
         } else {
             console.log('No se pudo actualizar el recibo')
@@ -51,17 +74,67 @@ const EditarRecibo = () => {
 
     return(
         <>
-            <p>RECIBO A EDITAR:</p>
-            <p>ID:{idRecibo}</p>
-            <p>Proveedor:{proveedorEditado}</p>
-            <p>Monto:{montoEditado}</p>
-            <p>Moneda:{monedaEditado}</p>
-            <p>Fecha:{fechaEditado}</p>
-            <p>Comentario:{comentarioEditado}</p>
-
-            <button onClick={handleEditarRecibo}>
-                Editar
-            </button>
+           { !!errorMensaje && <div style={{ color: "#DC143C" }}>{errorMensaje}</div> }
+            <form
+                onSubmit={handleEditarRecibo}
+            >
+                <label 
+                    htmlFor="proveedor"
+                >Proveedor:</label>
+                <input
+                    id="proveedor"
+                    type="text"
+                    placeholder="Ingrese nombre proveedor"
+                    value={proveedorEditado}
+                    onChange={(e) => setProveedorEditado(e.target.value)}
+                />
+                <label 
+                    htmlFor="monto"
+                >Monto:</label>
+                <input
+                    id="monto"
+                    type="number"
+                    min="0"
+                    step=".01"
+                    placeholder="Ingrese monto"
+                    value={montoEditado}
+                    onChange={(e) => setMontoEditado(e.target.value)}
+                />
+                <label 
+                    htmlFor="moneda"
+                >Moneda:</label>
+                <select
+                    value={monedaEditado}
+                    onChange={(e) => setMonedaEditado(e.target.value)}
+                >
+                    <option value="MXN">MXN</option>
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                    <option value="MXN">GBP</option>
+                </select>
+                <label
+                    htmlFor="fecha"
+                >Fecha:</label>
+                <input
+                    id="fecha"
+                    type="date"
+                    value={fechaEditado}
+                    onChange={(e) => setFechaEditado(e.target.value)}
+                />
+                <label
+                    htmlFor='comentario'
+                >Comentario:</label>
+                <textarea
+                    id='comentario'
+                    placeholder='Comentario:'
+                    value={comentarioEditado}
+                    onChange={(e) => setComentarioEditado(e.target.value)}
+                />
+                <input
+                    type="submit"
+                    value="Actualizar recibo"
+                />
+            </form>
 
             <Link to="/dashboard">Regresar</Link>
         </>

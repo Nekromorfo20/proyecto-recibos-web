@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import { useAuth } from "../auth/AuthProvider"
+import { Link } from "react-router-dom"
 import { eliminarRecibo, obtenerRecibos } from '../services'
 import TablaRecibos from "../components/TablaRecibos"
 
@@ -30,6 +31,9 @@ const Dashboard = () => {
     return (
         <>
             <h1>Lista de recibos de {auth.getUser()}</h1>
+
+            <Link to="/recibo/crear">Crear recibo</Link>
+
             <table>
                 <thead>
                     <tr>
