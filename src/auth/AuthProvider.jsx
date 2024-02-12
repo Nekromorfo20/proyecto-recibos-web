@@ -33,18 +33,20 @@ export function AuthProvider({ children }) {
         setIsAuthenticated(true)
     }
 
-    async function checkAuth() {
-        if (token != null && user != null) {
-            // El usuario ya está autenticado
-            setIsAuthenticated(true)
-        } else {
-            // El usuario no está autenticado
-            setIsAuthenticated(false)
-        }
-    }
-
     useEffect(() => {
-        checkAuth()
+        const tokeSesion = JSON.parse(localStorage.getItem("token"))
+        const userSesion = JSON.parse(localStorage.getItem("nombre"))
+
+        if (tokeSesion && userSesion) {
+          setIsAuthenticated(true)
+          saveToken(tokeSesion)
+          saveUser(userSesion)
+
+        } else {
+          setIsAuthenticated(false)
+          localStorage.removeItem("token")
+          localStorage.removeItem("user")
+        }
       }, [])
 
     return (

@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Navigate, useNavigate } from "react-router-dom"
-import axios from "axios"
 import { useAuth } from "../auth/AuthProvider"
+import { usuarioIniciarSesion } from '../services'
 import DefaultLayout from "../layout/DefaultLayout"
 
 export default function Login() {
@@ -21,23 +21,11 @@ export default function Login() {
                 return null
             }
 
-            const response = await axios({
-                method: 'post',
-                url: `${import.meta.env.VITE_API_URL}/usuario-inicio-sesion`,
-                headers: {},
-                data: {
-                    nombre: username,
-                    contrasena: password
-                },
-                responseType: 'json'
-            })
-
+            const response = await usuarioIniciarSesion(username, password)
             if (response) {
-                // Redirigir a /dashboard y cargar token en localStorage
                 console.log("¡Inicio de sesión correcto!")
                 setErrorResponse("")
 
-                // Almacenar token recibido de backend
                 if (response?.data?.respuesta) {
                     auth.saveToken(response.data.respuesta.token)
                     auth.saveUser(response.data.respuesta.nombre)
@@ -45,15 +33,14 @@ export default function Login() {
                 }
 
             } else {
-                // Mostrar error en formulario
                 console.log('¡Ocurrio un error!')
-                setErrorResponse('[1] !Error al iniciar sesión¡')
+                setErrorResponse('!Error al iniciar sesión¡')
                 return null
             }
 
         } catch (error) {
             console.log(error)
-            setErrorResponse('[2] !Error al iniciar sesión¡')
+            setErrorResponse('!Error al iniciar sesión¡')
         }
     }
 
