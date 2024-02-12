@@ -5,20 +5,30 @@ const TablaRecibos = ({ recibo, handleEliminarRecibo }) => {
     const { id, proveedor, monto, moneda, fecha, comentario } = recibo
 
     return (
-    <tr>
-        <td>{id}</td>
-        <td>{proveedor}</td>
-        <td>{monto}</td>
-        <td>{moneda}</td>
-        <td>{fecha}</td>
-        <td>{comentario}</td>
-        <td>
-            <button onClick={() => goTo(`/recibo/${id}/editar`)}>Editar</button>
-        </td>
-        <td>
-            <button onClick={() => handleEliminarRecibo(id)}>Eliminar</button>
-        </td>
-    </tr>
+    <>
+        <tr>
+            <th scope="row">{id}</th>
+            <td>{proveedor}</td>
+            <td>{monto}</td>
+            <td>{moneda}</td>
+            <td>{fecha}</td>
+            <td>{comentario}</td>
+            <td>
+                <button
+                    type="button"
+                    className="btn btn-warning"
+                    onClick={() => goTo(`/recibo/${id}/editar`)}
+                >Editar</button>
+            </td>
+            <td>
+                <button
+                    type="button"
+                    className="btn btn-danger"
+                    onClick={() => handleEliminarRecibo(id)}
+            >Eliminar</button>
+            </td>
+        </tr>
+    </>
     )
 }
 

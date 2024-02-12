@@ -4,7 +4,7 @@ import { useAuth } from "../auth/AuthProvider"
 import { crearReciboService } from '../services'
 import DefaultLayout from "../layout/DefaultLayout"
 
-const EditarRecibo = () => {
+const CrearRecibo = () => {
     const auth = useAuth()
     const goTo = useNavigate()
 
@@ -23,7 +23,10 @@ const EditarRecibo = () => {
             monedaNuevo.trim() === "" ||
             fechaNuevo.trim() === "" ||
             comentarioNuevo.trim() === "") {
-            setErrorMensaje("Todos los campos son obligatorios")
+            setErrorMensaje("!Todos los campos son obligatorios¡")
+            setTimeout(() => {
+                setErrorMensaje("")
+            }, 5000)
             return null
         }
 
@@ -31,23 +34,31 @@ const EditarRecibo = () => {
         const valComentario = comentarioNuevo.match("^[a-zA-Z0-9áéíóúÁÉÍÓÚ ]*$")
 
         if (valProveedor === null || valComentario === null) {
-            setErrorMensaje("No se permiten caracteres especiales en Proveedor y Comentario")
+            setErrorMensaje("¡No se permiten caracteres especiales en los campos proveedor y comentario!")
+            setTimeout(() => {
+                setErrorMensaje("")
+            }, 5000)
             return null
         }
 
         if (Number(montoNuevo) < 0) {
-            setErrorMensaje("El monto no puede ser menor a 0")
+            setErrorMensaje("¡El monto no puede ser menor a 0!")
+            setTimeout(() => {
+                setErrorMensaje("")
+            }, 5000)
             return null
         }
 
         const resultado = await crearReciboService(auth.obtenerNombre(), proveedorNuevo, montoNuevo, monedaNuevo, fechaNuevo, comentarioNuevo, auth.obtenerToken())
         if (resultado?.data?.statusCode == 200) {
             setErrorMensaje("")
-            console.log('Recibo creado con exito')
+            alert("¡El recibo se ha creado con exito!")
             goTo("/dashboard")
         } else {
-            console.log('No se pudo crear el recibo')
-            setErrorMensaje("No se pudo crear el recibo")
+            setErrorMensaje("¡Ocurrio un error al crear el recibo!")
+            setTimeout(() => {
+                setErrorMensaje("")
+            }, 5000)
             return null
         }
     }
@@ -55,72 +66,70 @@ const EditarRecibo = () => {
     return(
     <>
         <DefaultLayout>
-            { !!errorMensaje && <div style={{ color: "#DC143C" }}>{errorMensaje}</div> }
-            <form
-                onSubmit={handleCrearRecibo}
-            >
-                <label 
-                    htmlFor="proveedor"
-                >Proveedor:</label>
-                <input
-                    id="proveedor"
-                    type="text"
-                    placeholder="Ingrese nombre proveedor"
-                    value={proveedorNuevo}
-                    onChange={(e) => setProveedorNuevo(e.target.value)}
-                />
-                <label 
-                    htmlFor="monto"
-                >Monto:</label>
-                <input
-                    id="monto"
-                    type="number"
-                    min="0"
-                    step=".01"
-                    placeholder="Ingrese monto"
-                    value={montoNuevo}
-                    onChange={(e) => setMontoNuevo(e.target.value)}
-                />
-                <label 
-                    htmlFor="moneda"
-                >Moneda:</label>
-                <select
-                    value={monedaNuevo}
-                    onChange={(e) => setMonedaNuevo(e.target.value)}
-                >
-                    <option value=""></option>
-                    <option value="MXN">MXN</option>
-                    <option value="USD">USD</option>
-                    <option value="EUR">EUR</option>
-                    <option value="MXN">GBP</option>
-                </select>
-                <label
-                    htmlFor="fecha"
-                >Fecha:</label>
-                <input
-                    id="fecha"
-                    type="date"
-                    value={fechaNuevo}
-                    onChange={(e) => setFechaNuevo(e.target.value)}
-                />
-                <label
-                    htmlFor='comentario'
-                >Comentario:</label>
-                <textarea
-                    id='comentario'
-                    placeholder='Comentario:'
-                    value={comentarioNuevo}
-                    onChange={(e) => setComentarioNuevo(e.target.value)}
-                />
-                <input
-                    type="submit"
-                    value="Crear recibo"
-                />
-            </form>
-            <Link to="/dashboard">Regresar</Link>
+            <div className="container py-5 h-100">
+                <div className="row d-flex justify-content-center align-items-center h-100">
+                    <h2>CREANDO NUEVO RECIBO:</h2>
+                    <hr className="hr mb-4" />
+
+                    <form onSubmit={handleCrearRecibo}>
+                        { !!errorMensaje && 
+                            <div className="alert alert-danger mb-3" role="alert">{errorMensaje}</div> 
+                        }
+                        <div className="mb-3">
+                            <label htmlFor="proveedor" className="form-label">Proveedor:</label>
+                            <input id="proveedor" type="text" className="form-control" placeholder="Ingrese nombre proveedor" value={proveedorNuevo} onChange={(e) => setProveedorNuevo(e.target.value)} />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="monto" className="form-label">Monto:</label>
+                            <input id="monto" type="number" className="form-control" placeholder="Ingrese monto" value={montoNuevo} onChange={(e) => setMontoNuevo(e.target.value)} />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="moneda" className="form-label">Moneda:</label>
+                            <select
+                                id="moneda"
+                                className="form-select"
+                                value={monedaNuevo}
+                                onChange={(e) => setMonedaNuevo(e.target.value)}
+                            >
+                                <option value=""></option>
+                                <option value="MXN">MXN</option>
+                                <option value="USD">USD</option>
+                                <option value="EUR">EUR</option>
+                                <option value="MXN">GBP</option>
+                            </select>
+                        </div>
+                        <div className="mb-3">
+                            <label
+                                htmlFor="fecha"
+                                className="form-label"
+                            >Fecha:</label>
+                            <input
+                                id="fecha"
+                                type="date"
+                                className="form-control"
+                                value={fechaNuevo}
+                                onChange={(e) => setFechaNuevo(e.target.value)}
+                            />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor='comentario' className="form-label">Comentario:</label>
+                            <textarea className="form-control" id="comentario" rows="3" placeholder="Ingrese algun comentario" value={comentarioNuevo} onChange={(e) => setComentarioNuevo(e.target.value)} />
+                        </div>
+
+                        <div className="d-flex justify-content-between">
+                            <Link className="btn btn-secondary" to="/dashboard">Regresar</Link>
+                            <input
+                                className="btn btn-primary"
+                                type="submit"
+                                value="Crear nuevo recibo"
+                            />
+                        </div>
+                    </form>
+                </div>
+            </div>
         </DefaultLayout>
     </>
     )
 }
 
-export default EditarRecibo
+export default CrearRecibo

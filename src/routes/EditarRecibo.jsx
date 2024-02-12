@@ -41,7 +41,10 @@ const EditarRecibo = () => {
 
         // Validar datos  
         if (proveedorEditado.trim() === "") {
-            setErrorMensaje("Debe colocar el nombre del proveedor")
+            setErrorMensaje("!El nombre del proveedor es obligatorio¡")
+            setTimeout(() => {
+                setErrorMensaje("")
+            }, 5000)
             return null
         }
 
@@ -49,23 +52,32 @@ const EditarRecibo = () => {
         const valComentario = comentarioEditado.match("^[a-zA-Z0-9áéíóúÁÉÍÓÚ ]*$")
         
         if (valProveedor === null || valComentario === null) {
-            setErrorMensaje("No se permiten caracteres especiales en Proveedor y Comentario")
+            setErrorMensaje("¡No se permiten caracteres especiales en los campos proveedor y comentario!")
+            setTimeout(() => {
+                setErrorMensaje("")
+            }, 5000)
             return null
         }
 
         if (Number(montoEditado) < 0) {
-            setErrorMensaje("El monto no puede ser menor a 0")
+            setErrorMensaje("¡El monto no puede ser menor a 0!")
+            setTimeout(() => {
+                setErrorMensaje("")
+            }, 5000)
             return null
         }
 
         const resultado = await editarReciboService(idRecibo, proveedorEditado, montoEditado, monedaEditado, fechaEditado, comentarioEditado, auth.obtenerToken())
         if (resultado?.data?.statusCode == 200) {
             setErrorMensaje("")
-            console.log('Recibo editado con exito')
+            alert("¡El recibo se ha actualizado con exito!")
             goTo("/dashboard")
         } else {
-            console.log('No se pudo actualizar el recibo')
-            goTo("/dashboard")
+            setErrorMensaje("¡Ocurrio un error al actualizar el recibo!")
+            setTimeout(() => {
+                setErrorMensaje("")
+            }, 5000)
+            return null
         }
     }
 
@@ -76,69 +88,66 @@ const EditarRecibo = () => {
     return(
     <>
         <DefaultLayout>
-            { !!errorMensaje && <div style={{ color: "#DC143C" }}>{errorMensaje}</div> }
-            <form
-                onSubmit={handleEditarRecibo}
-            >
-                <label 
-                    htmlFor="proveedor"
-                >Proveedor:</label>
-                <input
-                    id="proveedor"
-                    type="text"
-                    placeholder="Ingrese nombre proveedor"
-                    value={proveedorEditado}
-                    onChange={(e) => setProveedorEditado(e.target.value)}
-                />
-                <label 
-                    htmlFor="monto"
-                >Monto:</label>
-                <input
-                    id="monto"
-                    type="number"
-                    min="0"
-                    step=".01"
-                    placeholder="Ingrese monto"
-                    value={montoEditado}
-                    onChange={(e) => setMontoEditado(e.target.value)}
-                />
-                <label 
-                    htmlFor="moneda"
-                >Moneda:</label>
-                <select
-                    value={monedaEditado}
-                    onChange={(e) => setMonedaEditado(e.target.value)}
-                >
-                    <option value="MXN">MXN</option>
-                    <option value="USD">USD</option>
-                    <option value="EUR">EUR</option>
-                    <option value="MXN">GBP</option>
-                </select>
-                <label
-                    htmlFor="fecha"
-                >Fecha:</label>
-                <input
-                    id="fecha"
-                    type="date"
-                    value={fechaEditado}
-                    onChange={(e) => setFechaEditado(e.target.value)}
-                />
-                <label
-                    htmlFor='comentario'
-                >Comentario:</label>
-                <textarea
-                    id='comentario'
-                    placeholder='Comentario:'
-                    value={comentarioEditado}
-                    onChange={(e) => setComentarioEditado(e.target.value)}
-                />
-                <input
-                    type="submit"
-                    value="Actualizar recibo"
-                />
-            </form>
+            <div className="container py-5 h-100">
+                <div className="row d-flex justify-content-center align-items-center h-100">
+                    <h2>EDITANDO RECIBO:</h2>
+                    <hr className="hr mb-4" />
 
-            <Link to="/dashboard">Regresar</Link>
+                    <form onSubmit={handleEditarRecibo}>
+                        { !!errorMensaje && 
+                            <div className="alert alert-danger mb-3" role="alert">{errorMensaje}</div> 
+                        }
+                        <div className="mb-3">
+                            <label htmlFor="proveedor" className="form-label">Proveedor:</label>
+                            <input id="proveedor" type="text" className="form-control" placeholder="Ingrese nombre proveedor" value={proveedorEditado} onChange={(e) => setProveedorEditado(e.target.value)} />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="monto" className="form-label">Monto:</label>
+                            <input id="monto" type="number" className="form-control" placeholder="Ingrese monto" value={montoEditado} onChange={(e) => setMontoEditado(e.target.value)} />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="moneda" className="form-label">Moneda:</label>
+                            <select
+                                id="moneda"
+                                className="form-select"
+                                value={monedaEditado}
+                                onChange={(e) => setMonedaEditado(e.target.value)}
+                            >
+                                <option value="MXN">MXN</option>
+                                <option value="USD">USD</option>
+                                <option value="EUR">EUR</option>
+                                <option value="MXN">GBP</option>
+                            </select>
+                        </div>
+                        <div className="mb-3">
+                            <label
+                                htmlFor="fecha"
+                                className="form-label"
+                            >Fecha:</label>
+                            <input
+                                id="fecha"
+                                type="date"
+                                className="form-control"
+                                value={fechaEditado}
+                                onChange={(e) => setFechaEditado(e.target.value)}
+                            />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor='comentario' className="form-label">Comentario:</label>
+                            <textarea className="form-control" id="comentario" rows="3" placeholder="Ingrese algun comentario" value={comentarioEditado} onChange={(e) => setComentarioEditado(e.target.value)} />
+                        </div>
+
+                        <div className="d-flex justify-content-between">
+                            <Link className="btn btn-secondary" to="/dashboard">Regresar</Link>
+                            <input
+                                className="btn btn-primary"
+                                type="submit"
+                                value="Actualizar recibo"
+                            />
+                        </div>
+                    </form>
+                </div>
+            </div>
         </DefaultLayout>
     </>
     )

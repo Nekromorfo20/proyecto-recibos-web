@@ -20,7 +20,7 @@ const Login = () => {
 
                 setTimeout(() => {
                     setErrorMensaje("")
-                }, 3000)
+                }, 5000)
                 return null
             }
 
@@ -51,34 +51,38 @@ const Login = () => {
     }
 
     return (
-    <form className="form" onSubmit={handleSubmit}>
-        <h1>¡Bienvenido!</h1>
-        { !!errorMensaje && <div className="errorMessage">{errorMensaje}</div> }
-        <label
-            htmlFor="nombre"
-        >Nombre usuario:</label>
-        <input
-            id="nombre"
-            type="text"
-            placeholder="Ingrese nombre del usuario"
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
-        />
-        <label
-            htmlFor="contrasena"
-        >Contraseña:</label>
-        <input
-            id="contrasena"
-            type="password"
-            placeholder="Ingrese contraseña del usuario"
-            value={contrasena}
-            onChange={(e) => setContrasena(e.target.value)}
-        />
-        <input
-            type="submit"
-            value="Iniciar sesión"
-        />
-    </form>
+        <section className="vh-100">
+            <div className="container py-5 h-100">
+                <div className="row d-flex justify-content-center align-items-center h-100">
+                    <form className="col-12 col-md-8 col-lg-6 col-xl-5" onSubmit={handleSubmit}>
+                        <div className="card shadow-2-strong" style={{ borderRadius: "1rem" }}>
+                            <div className="card-body p-5">   
+                                <h2 className="mb-5 text-center"><u>PORTAL DE RECIBOS</u></h2>
+                                { !!errorMensaje && 
+                                    <div className="alert alert-danger" role="alert">{errorMensaje}</div> 
+                                }
+                                <div className="mb-4">
+                                    <label htmlFor="nombre" className="form-label">Nombre usuario:</label>
+                                    <input id="proveedor" type="text" className="form-control" placeholder="Ingrese nombre del usuario" value={nombre} onChange={(e) => setNombre(e.target.value)} />
+                                </div>
+                                <div className="mb-4">
+                                    <label htmlFor="contrasena" className="form-label">Contraseña:</label>
+                                    <input id="contrasena" type="text" className="form-control" placeholder="Ingrese la contraseña del usuario" value={contrasena} onChange={(e) => setContrasena(e.target.value)} />
+                                </div>
+                                <div className="mb-4">
+                                    <input
+                                        className="btn btn-primary btn-lg btn-block"
+                                        type="submit"
+                                        value="Iniciar sesión"
+                                        style={{ width: '100%' }}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+      </section>
     )
 }
 

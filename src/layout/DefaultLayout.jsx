@@ -12,17 +12,11 @@ const DefaultLayout = ({ children }) => {
     return (
     <>
         <header>
-            <nav>
-                <ul>
-                    <li>
-                        {`Hola ${nombre}`}
-                    </li>
-                    <li>
-                        <button onClick={handleCerrarSesion}>
-                            Cerrar sesión
-                        </button>
-                    </li>
-                </ul>
+            <nav className="px-5 navbar navbar-light bg-light justify-content-between px">
+                <a className="navbar-brand text-uppercase font-weight-bold">{`BIENVENIDO ${nombre}`}</a>
+                <form className="form-inline">
+                    <button className="btn btn-outline-danger my-2 my-sm-0" type="button" onClick={handleCerrarSesion}>Cerrar sesión</button>
+                </form>
             </nav>
         </header>
 

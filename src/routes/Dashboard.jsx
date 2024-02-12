@@ -16,9 +16,12 @@ const Dashboard = () => {
     }
 
     const handleEliminarRecibo = async (id) => {
-        const resultado = await eliminarReciboService(id, auth.obtenerNombre(), auth.obtenerToken())
-        console.log('¡Recibo eliminado con exito!')
-        if (resultado?.data?.statusCode == 200) listarRecibos(filtroNombre)
+        const aceptar = confirm(`¿Esta seguro de eliminar el recibo seleccionado?`)
+        if (aceptar) {
+            const resultado = await eliminarReciboService(id, auth.obtenerNombre(), auth.obtenerToken())
+            console.log('¡Recibo eliminado con exito!')
+            if (resultado?.data?.statusCode == 200) listarRecibos(filtroNombre)
+        }
     }
 
     // Carga recibos iniciales
@@ -34,39 +37,46 @@ const Dashboard = () => {
     return (
     <>
         <DefaultLayout>
-            <h1>Listado de recibos:</h1>
-            <Link to="/recibo/crear">Crear recibo</Link>
-            <br />
-            <select
-                value={filtroNombre}
-                onChange={(e) => setfiltroNombre(e.target.value)}
-            >
-                <option value="">Todos</option>
-                <option value={auth.obtenerNombre()}>Mis recibos</option>
-            </select>
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Proveedor</th>
-                        <th>Monto</th>
-                        <th>Moneda</th>
-                        <th>Fecha</th>
-                        <th>Comentario</th>
-                        <th>Actualizar</th>
-                        <th>Eliminar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {recibos.map((recibo) => (
-                        <TablaRecibos
-                            key={recibo.id}
-                            recibo={recibo}
-                            handleEliminarRecibo={handleEliminarRecibo}
-                        />
-                    ))}
-                </tbody>
-            </table>
+            <div className="container py-3 h-100">
+                <h1 className="display-1">Lista de recibos:</h1>
+                <hr className="hr" />
+
+                <div className="d-flex justify-content-between">
+                    <Link to="/recibo/crear" className="btn btn-success" role="button">Nuevo recibo</Link>
+                    <select
+                        className="form-select"
+                        style={{ maxWidth: 200 }}
+                        value={filtroNombre}
+                        onChange={(e) => setfiltroNombre(e.target.value)}
+                    >
+                        <option value="">Todos los recibos</option>
+                        <option value={auth.obtenerNombre()}>Mis recibos</option>
+                    </select>
+                </div>
+                <table className="table table-hover mt-4">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Proveedor</th>
+                            <th scope="col">Monto</th>
+                            <th scope="col">Moneda</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Comentario</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {recibos.map((recibo) => (
+                            <TablaRecibos
+                                key={recibo.id}
+                                recibo={recibo}
+                                handleEliminarRecibo={handleEliminarRecibo}
+                            />
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </DefaultLayout>
     </>
     )
