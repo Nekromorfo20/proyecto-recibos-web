@@ -1,9 +1,10 @@
+import "bootstrap/dist/css/bootstrap.min.css"
 import './App.css'
 
 const App = () => {
   return (
     <>
-      <h1>Hola mundo</h1>
+      <h1>¡Proyecto recibos web!</h1>
     </>
   )
 }

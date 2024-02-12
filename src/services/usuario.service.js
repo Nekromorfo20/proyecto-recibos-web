@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const usuarioIniciarSesion = async (nombre, contrasena) => {
+const usuarioIniciarSesionService = async (nombre, contrasena) => {
     const response = await axios({
         method: 'post',
         url: `${import.meta.env.VITE_API_URL}/usuario-inicio-sesion`,
@@ -18,5 +18,5 @@ const usuarioIniciarSesion = async (nombre, contrasena) => {
 }
 
 export {
-    usuarioIniciarSesion
+    usuarioIniciarSesionService
 }
