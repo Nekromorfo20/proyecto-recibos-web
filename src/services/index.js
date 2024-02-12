@@ -1,5 +1,11 @@
 import { usuarioIniciarSesion } from './usuario.service'
+import { obtenerRecibo, obtenerRecibos, crearRecibo, editarRecibo, eliminarRecibo } from './recibo.service'
 
 export {
-    usuarioIniciarSesion
+    usuarioIniciarSesion,
+    obtenerRecibo,
+    obtenerRecibos,
+    crearRecibo,
+    editarRecibo,
+    eliminarRecibo
 }

@@ -5,7 +5,8 @@ const AuthContext = createContext({
     getToken: () => {},
     saveToken: () => {},
     getUser: () => {},
-    saveUser: () => {}
+    saveUser: () => {},
+    logOut: () => {}
 })
 
 export function AuthProvider({ children }) {
@@ -33,6 +34,12 @@ export function AuthProvider({ children }) {
         setIsAuthenticated(true)
     }
 
+    const logOut = () => {
+        localStorage.removeItem("token")
+        localStorage.removeItem("nombre")
+        setIsAuthenticated(false)
+    }
+
     useEffect(() => {
         const tokeSesion = JSON.parse(localStorage.getItem("token"))
         const userSesion = JSON.parse(localStorage.getItem("nombre"))
@@ -50,8 +57,14 @@ export function AuthProvider({ children }) {
       }, [])
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, getToken, saveToken, getUser, saveUser }}>
-            {children}
+        <AuthContext.Provider value={{ 
+            isAuthenticated,
+            getToken,
+            saveToken,
+            getUser,
+            saveUser,
+            logOut
+        }}>{children}
         </AuthContext.Provider>
     )
 }
