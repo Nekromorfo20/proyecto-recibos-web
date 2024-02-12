@@ -28,9 +28,9 @@ const Login = () => {
             if (response) {
                 setErrorMensaje("")
 
-                if (response?.data?.respuesta) {
-                    auth.guardarToken(response.data.respuesta.token)
-                    auth.guardarNombre(response.data.respuesta.nombre)
+                if (response?.data?.statusCode == 200) {
+                    auth.guardarToken(response.data.data.token)
+                    auth.guardarNombre(response.data.data.nombre)
                     goTo("/dashboard")
                 }
 

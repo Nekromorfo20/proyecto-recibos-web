@@ -21,8 +21,8 @@ const EditarRecibo = () => {
         let id = Number(location.pathname.replace(/\D/g, ""))
 
         const respuesta = await obtenerReciboService(id, auth.obtenerToken())
-        if (respuesta?.data?.respuesta) {
-            const { proveedor, monto, moneda, fecha, comentario } = respuesta.data.respuesta
+        if (respuesta?.data?.statusCode == 200) {
+            const { proveedor, monto, moneda, fecha, comentario } = respuesta.data.data
             setIdRecibo(id)
             setProveedorEditado(proveedor)
             setMontoEditado(monto)
@@ -59,7 +59,7 @@ const EditarRecibo = () => {
         }
 
         const resultado = await editarReciboService(idRecibo, proveedorEditado, montoEditado, monedaEditado, fechaEditado, comentarioEditado, auth.obtenerToken())
-        if (resultado?.data?.respuesta) {
+        if (resultado?.data?.statusCode == 200) {
             setErrorMensaje("")
             console.log('Recibo editado con exito')
             goTo("/dashboard")

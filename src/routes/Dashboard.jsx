@@ -12,12 +12,13 @@ const Dashboard = () => {
 
     const listarRecibos = async (nombre) => {
         const resultado = await obtenerRecibosService(nombre, auth.obtenerToken())
-        setRecibos(resultado?.data?.respuesta)
+        setRecibos(resultado?.data?.data)
     }
 
     const handleEliminarRecibo = async (id) => {
         const resultado = await eliminarReciboService(id, auth.obtenerNombre(), auth.obtenerToken())
-        if (resultado?.data) listarRecibos()
+        console.log('¡Recibo eliminado con exito!')
+        if (resultado?.data?.statusCode == 200) listarRecibos(filtroNombre)
     }
 
     // Carga recibos iniciales

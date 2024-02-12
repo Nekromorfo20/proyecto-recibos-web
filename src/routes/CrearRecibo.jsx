@@ -41,7 +41,7 @@ const EditarRecibo = () => {
         }
 
         const resultado = await crearReciboService(auth.obtenerNombre(), proveedorNuevo, montoNuevo, monedaNuevo, fechaNuevo, comentarioNuevo, auth.obtenerToken())
-        if (resultado?.data?.respuesta) {
+        if (resultado?.data?.statusCode == 200) {
             setErrorMensaje("")
             console.log('Recibo creado con exito')
             goTo("/dashboard")
