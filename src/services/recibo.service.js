@@ -14,7 +14,7 @@ const obtenerReciboService = async (id, token) => {
 }
 
 const obtenerRecibosService = async (nombre, token) => {
-    const exts = (nombre !== '' || nombre !== null) ? `?nombre=${nombre}` : ''
+    const exts = (nombre !== '' && nombre !== null) ? `?nombre=${nombre}` : ''
 
     const response = await axios({
         method: 'get',

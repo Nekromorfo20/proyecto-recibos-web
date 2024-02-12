@@ -8,9 +8,10 @@ import DefaultLayout from "../layout/DefaultLayout"
 const Dashboard = () => {
     const auth = useAuth()
     const [recibos, setRecibos] = useState([])
+    const [filtroNombre, setfiltroNombre] = useState("")
 
-    const listarRecibos = async () => {
-        const resultado = await obtenerRecibosService(auth.obtenerNombre(), auth.obtenerToken())
+    const listarRecibos = async (nombre) => {
+        const resultado = await obtenerRecibosService(nombre, auth.obtenerToken())
         setRecibos(resultado?.data?.respuesta)
     }
 
@@ -19,16 +20,29 @@ const Dashboard = () => {
         if (resultado?.data) listarRecibos()
     }
 
+    // Carga recibos iniciales
     useEffect(() => {
-        listarRecibos()
+        listarRecibos("")
     }, [])
+
+    // Si se cambios el <select> se llama nuevamente al servicio de recibos con el filtro nombre
+    useEffect(() => {
+        listarRecibos(filtroNombre)
+    }, [filtroNombre])
 
     return (
     <>
         <DefaultLayout>
             <h1>Listado de recibos:</h1>
             <Link to="/recibo/crear">Crear recibo</Link>
-
+            <br />
+            <select
+                value={filtroNombre}
+                onChange={(e) => setfiltroNombre(e.target.value)}
+            >
+                <option value="">Todos</option>
+                <option value={auth.obtenerNombre()}>Mis recibos</option>
+            </select>
             <table>
                 <thead>
                     <tr>
