@@ -67,7 +67,7 @@ const Login = () => {
                                 </div>
                                 <div className="mb-4">
                                     <label htmlFor="contrasena" className="form-label">Contraseña:</label>
-                                    <input id="contrasena" type="text" className="form-control" placeholder="Ingrese la contraseña del usuario" value={contrasena} onChange={(e) => setContrasena(e.target.value)} />
+                                    <input id="contrasena" type="password" className="form-control" placeholder="Ingrese la contraseña del usuario" value={contrasena} onChange={(e) => setContrasena(e.target.value)} />
                                 </div>
                                 <div className="mb-4">
                                     <input
